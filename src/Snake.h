@@ -7,11 +7,14 @@ class Snake {
     public:
         unsigned int VAO, VBO, EBO;
 
+        float width = 30;
+        float height = 30;
+
         glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 
         glm::vec3 speed = glm::vec3(0.0f, 0.0f, 0.0f);
 
-        float acceleration = 50.0f;
+        float acceleration = width;
 
         enum STATE {
             UP,
@@ -25,9 +28,9 @@ class Snake {
         Snake() {
             float vertices[] = {
                 0.0f, 0.0f, 0.0f,
-                50.0f, 0.0f, 0.0f,
-                0.0f, 50.0f, 0.0f,
-                50.0f, 50.0f, 0.0f
+                width, 0.0f, 0.0f,
+                0.0f, height, 0.0f,
+                width, height, 0.0f
             };
 
             unsigned int indices[] = {
