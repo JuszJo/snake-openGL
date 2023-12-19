@@ -11,7 +11,7 @@ class Snake {
 
         glm::vec3 speed = glm::vec3(0.0f, 0.0f, 0.0f);
 
-        float acceleration = 0.25f;
+        float acceleration = 50.0f;
 
         enum STATE {
             UP,
@@ -72,39 +72,39 @@ class Snake {
             }
         }
 
-        void update() {
+        void setSpeed() {
             switch (currentState) {
                 case UP:
                     speed = glm::vec3(0.0f, acceleration, 0.0f);
-
-                    position += speed;
 
                     break;
 
                 case DOWN:
                     speed = glm::vec3(0.0f, -acceleration, 0.0f);
-
-                    position += speed;
                     
                     break;
 
                 case LEFT:
                     speed = glm::vec3(-acceleration, 0.0f, 0.0f);
-
-                    position += speed;
                     
                     break;
 
                 case RIGHT:
                     speed = glm::vec3(acceleration, 0.0f, 0.0f);
-
-                    position += speed;
                     
                     break;
             
             default:
                 break;
             }
+        }
+
+        void move() {
+            position += speed;
+        }
+
+        void update() {
+            move();
         }
 
         void render() {

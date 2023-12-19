@@ -75,20 +75,41 @@ int main() {
 
     glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
+    glfwSwapInterval(1);
+
+    double lastFrameTime = glfwGetTime();
+
+    double elapsed = 0.0;
+
+    bool starting = true;
+
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        model = glm::translate(model, snake.speed);
+        snake.processInput(window);
+        
+        snake.setSpeed();
 
         glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
         snake.render();
 
-        snake.processInput(window);
+        double currentFrameTime = glfwGetTime();
+        double delta = currentFrameTime - lastFrameTime;
 
-        snake.update();
+        elapsed += delta * 1000;
+
+        lastFrameTime = currentFrameTime;
+
+        if(elapsed >= 600.0) {
+            elapsed = 0;
+
+            model = glm::translate(model, snake.speed);
+
+            snake.update();
+        }
 
         glfwSwapBuffers(window);
 
