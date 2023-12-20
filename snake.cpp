@@ -8,10 +8,18 @@
 #include "src/Snake.h"
 #include "src/Food.h"
 
+glm::mat4 projection = glm::mat4(1.0f);
+
+bool projectionChanged = false;
+
 // make sure the viewport matches the new window dimensions; note that width and 
 // height will be significantly larger than specified on retina displays.
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+
+    projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
+
+    projectionChanged = true;
 }
 
 GLFWwindow* initWindow(int width, int height) {
@@ -56,8 +64,8 @@ void initGL(GLFWwindow* window) {
 }
 
 int main() {
-    int width = 600;
-    int height = 600;
+    float width = 600;
+    float height = 600;
 
     GLFWwindow* window = initWindow(width, height);
 
@@ -71,8 +79,7 @@ int main() {
 
     myShader.use();
 
-    glm::mat4 projection(1.0f);
-    projection = glm::ortho(0.0f, 600.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+    projection = glm::ortho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
 
     glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -89,6 +96,12 @@ int main() {
     bool starting = true;
 
     while(!glfwWindowShouldClose(window)) {
+        if(projectionChanged) {
+            glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+            projectionChanged = false;
+        }
+
         glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT);
