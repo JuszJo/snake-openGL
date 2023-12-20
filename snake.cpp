@@ -71,8 +71,6 @@ int main() {
 
     myShader.use();
 
-    // glm::mat4 model(1.0f);
-
     glm::mat4 projection(1.0f);
     projection = glm::ortho(0.0f, 600.0f, 0.0f, 600.0f, -1.0f, 1.0f);
 
@@ -99,11 +97,9 @@ int main() {
         
         snake.setSpeed();
 
-        // glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
         snake.render(myShader);
 
-        // food.render();
+        food.render(myShader);
 
         double currentFrameTime = glfwGetTime();
         double delta = currentFrameTime - lastFrameTime;
@@ -114,10 +110,6 @@ int main() {
 
         if(elapsed >= FPSInterval) {
             elapsed = 0;
-
-            // printf("%f\n", snake.position.x);
-
-            // model = glm::translate(model, snake.speed);
 
             snake.update();
         }

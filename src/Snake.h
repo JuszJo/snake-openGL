@@ -107,7 +107,6 @@ class Snake: public Entity {
         }
 
         void move() {
-            // printf("%f\n", position.y);
             position += speed;
         }
 
