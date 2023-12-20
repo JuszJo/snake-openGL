@@ -78,7 +78,7 @@ int main() {
 
     glfwSwapInterval(1);
 
-    double FPS = 3.0;
+    double FPS = 10.0;
 
     double FPSInterval = 1000 / FPS;
 
@@ -110,6 +110,8 @@ int main() {
 
         if(elapsed >= FPSInterval) {
             elapsed = 0;
+
+            snake.handleCollision(&food);
 
             snake.update();
         }

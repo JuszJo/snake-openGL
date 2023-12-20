@@ -1,3 +1,6 @@
+#ifndef FOOD_H
+#define FOOD_H
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -18,10 +21,10 @@ class Food: public Entity {
 
         Food() {
             float vertices[] = {
-                position.x, position.y, 0.0f,
-                position.x + width, position.y, 0.0f,
-                position.x, position.y + height, 0.0f,
-                position.x + width, position.y + height, 0.0f
+                position.x, position.y, 0.0f, 0.2f, 0.8f, 0.4f,
+                position.x + width, position.y, 0.0f, 0.2f, 0.8f, 0.4f,
+                position.x, position.y + height, 0.0f, 0.2f, 0.8f, 0.4f,
+                position.x + width, position.y + height, 0.0f, 0.2f, 0.8f, 0.4f
             };
 
             unsigned int indices[] = {
@@ -48,6 +51,12 @@ class Food: public Entity {
             cleanupBuffers();
         }
 
+        void updatePosition() {
+            model = glm::translate(model, glm::vec3(width, height, 0.0f));
+
+            position += glm::vec3(width, height, 0.0f);
+        }
+
         void render(Shader myShader) {
             glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
@@ -55,4 +64,15 @@ class Food: public Entity {
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
+
+    private:
+        void handleVertexArrayObject(unsigned int VAO) {
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
+            glEnableVertexAttribArray(0);
+
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+        }
 };
+
+#endif

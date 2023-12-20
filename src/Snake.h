@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../libs/shader.h"
 #include "Entity.h"
+#include "Food.h"
 
 class Snake: public Entity {
     public:
@@ -103,6 +104,24 @@ class Snake: public Entity {
             
             default:
                 break;
+            }
+        }
+
+        bool checkCollision(Food* food) {
+            if(
+                position == food -> position
+            ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        void handleCollision(Food* food) {
+            if(checkCollision(food)) {
+                // food.model = glm::translate(food.model, glm::vec3(400.0f, 400.0f, 0.0f));
+                food -> updatePosition();
             }
         }
 
