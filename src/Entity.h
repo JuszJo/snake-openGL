@@ -1,18 +1,12 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 class Entity {
-    public:
-        unsigned int VAO, VBO, EBO;
-
-        void render() {
-            glBindVertexArray(VAO);
-
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        }
-
     protected:
         void genVertexandBuffers(unsigned int* VAO, unsigned int* VBO) {
             glGenVertexArrays(1, VAO);
@@ -38,7 +32,6 @@ class Entity {
         }
 
         void handleVertexArrayObject(unsigned int VAO) {
-            
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
             glEnableVertexAttribArray(0);
         }
@@ -48,3 +41,5 @@ class Entity {
             glBindVertexArray(0);
         }
 };
+
+#endif

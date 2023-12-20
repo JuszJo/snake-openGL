@@ -6,6 +6,8 @@
 
 class Snake: public Entity {
     public:
+        unsigned int VAO, VBO, EBO;
+
         float width = 30;
         float height = 30;
 
@@ -26,10 +28,10 @@ class Snake: public Entity {
 
         Snake() {
             float vertices[] = {
-                0.0f, 0.0f, 0.0f,
-                width, 0.0f, 0.0f,
-                0.0f, height, 0.0f,
-                width, height, 0.0f
+                0.0f, 0.0f, 0.0f, 0.6f, 0.3f, 0.3f,
+                width, 0.0f, 0.0f, 0.6f, 0.3f, 0.3f,
+                0.0f, height, 0.0f, 0.6f, 0.3f, 0.3f,
+                width, height, 0.0f, 0.6f, 0.3f, 0.3f
             };
 
             unsigned int indices[] = {
@@ -102,6 +104,7 @@ class Snake: public Entity {
         }
 
         void move() {
+            // printf("%f\n", position.y);
             position += speed;
         }
 
@@ -113,5 +116,14 @@ class Snake: public Entity {
             glBindVertexArray(VAO);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+
+    private:
+        void handleVertexArrayObject(unsigned int VAO) {
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
+            glEnableVertexAttribArray(0);
+
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
         }
 };

@@ -4,8 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Entity.h"
 
-class Food: Entity {
+class Food: public Entity {
     public:
+        unsigned int VAO, VBO, EBO;
+        
         float width = 30;
         float height = 30;
 
@@ -23,5 +25,29 @@ class Food: Entity {
                 0, 1, 2,
                 1, 2, 3
             };
+
+            float verticesSize = sizeof(vertices);
+
+            float indicesSize = sizeof(indices);
+
+            genVertexandBuffers(&VAO, &VBO);
+
+            genElementBuffers(&EBO);
+
+            bindVAO(VAO);
+
+            handleVertexBufferObject(VBO, vertices, verticesSize);
+
+            handleElementBuffer(EBO, indices, indicesSize);
+
+            handleVertexArrayObject(VAO);
+
+            cleanupBuffers();
         }
-}
+
+        void render() {
+            glBindVertexArray(VAO);
+
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+};

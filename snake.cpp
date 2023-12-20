@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "libs/shader.h"
 #include "src/Snake.h"
+#include "src/Food.h"
 
 // make sure the viewport matches the new window dimensions; note that width and 
 // height will be significantly larger than specified on retina displays.
@@ -66,6 +67,8 @@ int main() {
 
     Snake snake;
 
+    Food food;
+
     myShader.use();
 
     glm::mat4 model(1.0f);
@@ -100,6 +103,8 @@ int main() {
 
         snake.render();
 
+        // food.render();
+
         double currentFrameTime = glfwGetTime();
         double delta = currentFrameTime - lastFrameTime;
 
@@ -109,6 +114,8 @@ int main() {
 
         if(elapsed >= FPSInterval) {
             elapsed = 0;
+
+            // printf("%f\n", snake.position.x);
 
             model = glm::translate(model, snake.speed);
 
