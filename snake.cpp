@@ -77,6 +77,10 @@ int main() {
 
     glfwSwapInterval(1);
 
+    double FPS = 3.0;
+
+    double FPSInterval = 1000 / FPS;
+
     double lastFrameTime = glfwGetTime();
 
     double elapsed = 0.0;
@@ -103,7 +107,7 @@ int main() {
 
         lastFrameTime = currentFrameTime;
 
-        if(elapsed >= 600.0) {
+        if(elapsed >= FPSInterval) {
             elapsed = 0;
 
             model = glm::translate(model, snake.speed);
