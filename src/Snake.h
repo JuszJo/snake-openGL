@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "../libs/shader.h"
 #include "Entity.h"
 
 class Snake: public Entity {
@@ -16,6 +17,8 @@ class Snake: public Entity {
         glm::vec3 speed = glm::vec3(0.0f, 0.0f, 0.0f);
 
         float acceleration = width;
+
+        glm::mat4 model = glm::mat4(1.0f);
 
         enum STATE {
             UP,
@@ -109,10 +112,14 @@ class Snake: public Entity {
         }
 
         void update() {
+            model = glm::translate(model, speed);
+
             move();
         }
 
-        void render() {
+        void render(Shader myShader) {
+            glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
             glBindVertexArray(VAO);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
