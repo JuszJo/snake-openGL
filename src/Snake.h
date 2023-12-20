@@ -33,6 +33,8 @@ class Snake: public Entity {
 
         STATE currentState = UP;
 
+        bool waitTillRender = false;
+
         Snake() {
             float vertices[] = {
                 0.0f, 0.0f, 0.0f, 0.6f, 0.3f, 0.3f,
@@ -69,17 +71,21 @@ class Snake: public Entity {
             if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
                 glfwSetWindowShouldClose(window, true);
             }
-            if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && currentState != DOWN && waitTillRender == false) {
                 if(currentState != UP) currentState = UP;
+                waitTillRender = true;
             }
-            if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && currentState != UP && waitTillRender == false) {
                 if(currentState != DOWN) currentState = DOWN;
+                waitTillRender = true;
             }
-            if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && currentState != RIGHT && waitTillRender == false) {
                 if(currentState != LEFT) currentState = LEFT;
+                waitTillRender = true;
             }
-            if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && currentState != LEFT && waitTillRender == false) {
                 if(currentState != RIGHT) currentState = RIGHT;
+                waitTillRender = true;
             }
         }
 
@@ -157,6 +163,10 @@ class Snake: public Entity {
             model = glm::translate(model, speed);
 
             move();
+
+            if(waitTillRender == true) {
+                waitTillRender = false;
+            }
         }
 
         void render(Shader myShader) {
@@ -175,13 +185,6 @@ class Snake: public Entity {
             glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-            // printf("%d\n", tailList.size());
-            
-
-            // printf("%d\n", sizeof(tail) / sizeof(int));
-
-            // if(tail)
         }
 
     private:
