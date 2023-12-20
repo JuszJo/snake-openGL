@@ -5,6 +5,7 @@
 #include "../libs/shader.h"
 #include "Entity.h"
 #include "Food.h"
+#include <vector>
 
 class Snake: public Entity {
     public:
@@ -20,6 +21,8 @@ class Snake: public Entity {
         float acceleration = width;
 
         glm::mat4 model = glm::mat4(1.0f);
+
+        std::vector<glm::vec3> tailList;
 
         enum STATE {
             UP,
@@ -118,10 +121,29 @@ class Snake: public Entity {
             }
         }
 
+        void addTail() {
+            tailList.push_back(position);
+        }
+
+        void moveTail() {
+            if(tailList.size() > 0) {
+                std::vector<glm::vec3> old = {position};
+
+                tailList.pop_back();
+
+                for(int i = 0; i < tailList.size(); ++i) {
+                    old.push_back(tailList[i]);
+                }
+
+                tailList = old;
+            }
+        }
+
         void handleCollision(Food* food) {
             if(checkCollision(food)) {
-                // food.model = glm::translate(food.model, glm::vec3(400.0f, 400.0f, 0.0f));
-                food -> updatePosition();
+                food -> updatePosition();;
+
+                addTail();
             }
         }
 
@@ -130,17 +152,36 @@ class Snake: public Entity {
         }
 
         void update() {
+            moveTail();
+
             model = glm::translate(model, speed);
 
             move();
         }
 
         void render(Shader myShader) {
-            glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
             glBindVertexArray(VAO);
 
+            for(int i = 0; i < tailList.size(); ++i) {
+                glm::mat4 model = glm::mat4(1.0f);
+
+                model = glm::translate(model, tailList[i]);
+
+                glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
+                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            }
+
+            glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            // printf("%d\n", tailList.size());
+            
+
+            // printf("%d\n", sizeof(tail) / sizeof(int));
+
+            // if(tail)
         }
 
     private:

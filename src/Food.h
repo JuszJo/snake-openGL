@@ -15,7 +15,7 @@ class Food: public Entity {
         float width = 30;
         float height = 30;
 
-        glm::vec3 position = glm::vec3(300.0f, 300.0f, 0.0f);
+        glm::vec3 position = glm::vec3(90.0f, 0.0f, 0.0f);
 
         glm::mat4 model = glm::mat4(1.0f);
 

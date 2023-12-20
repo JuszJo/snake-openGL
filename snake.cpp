@@ -102,6 +102,7 @@ int main() {
         food.render(myShader);
 
         double currentFrameTime = glfwGetTime();
+
         double delta = currentFrameTime - lastFrameTime;
 
         elapsed += delta * 1000;
@@ -111,9 +112,9 @@ int main() {
         if(elapsed >= FPSInterval) {
             elapsed = 0;
 
-            snake.handleCollision(&food);
-
             snake.update();
+
+            snake.handleCollision(&food);
         }
 
         glfwSwapBuffers(window);
