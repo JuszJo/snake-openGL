@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <random>
 #include "../libs/shader.h"
 #include "Entity.h"
 
@@ -51,10 +52,29 @@ class Food: public Entity {
             cleanupBuffers();
         }
 
-        void updatePosition() {
-            model = glm::translate(model, glm::vec3(width, height, 0.0f));
+        float randomPosition() {
+            std::random_device rd;
+            std::mt19937 gen(rd());
 
-            position += glm::vec3(width, height, 0.0f);
+            int multiple = 30;
+
+            std::uniform_int_distribution<int> distribution(0, 570);
+
+            int randomNumber = distribution(gen);
+
+            int randomPosition = randomNumber - (randomNumber % multiple);
+
+            return (float)randomPosition;
+        }
+
+        void updatePosition() {
+            float randPos = randomPosition();
+
+            model = glm::translate(model, -position);
+
+            model = glm::translate(model, glm::vec3(randPos, randPos, 0.0f));
+
+            position = glm::vec3(randPos, randPos, 0.0f);
         }
 
         void render(Shader myShader) {

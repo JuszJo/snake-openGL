@@ -29,6 +29,7 @@ class Snake: public Entity {
             DOWN,
             LEFT,
             RIGHT,
+            DEAD
         };
 
         STATE currentState = UP;
@@ -110,9 +111,29 @@ class Snake: public Entity {
                     speed = glm::vec3(acceleration, 0.0f, 0.0f);
                     
                     break;
+
+                case DEAD:
+                    speed = glm::vec3(0.0f, 0.0f, 0.0f);
+                    
+                    break;
             
             default:
                 break;
+            }
+        }
+
+        void checkWallCollision() {
+            if(position.x < 0) {
+                currentState = DEAD;
+            }
+            if(position.x + width > 600) {
+                currentState = DEAD;
+            }
+            if(position.y < 0) {
+                currentState = DEAD;
+            }
+            if(position.y + height > 600) {
+                currentState = DEAD;
             }
         }
 
@@ -146,6 +167,8 @@ class Snake: public Entity {
         }
 
         void handleCollision(Food* food) {
+            checkWallCollision();
+
             if(checkCollision(food)) {
                 food -> updatePosition();;
 
