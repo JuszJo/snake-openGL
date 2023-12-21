@@ -190,6 +190,8 @@ class Snake: public Entity {
             if(waitTillRender == true) {
                 waitTillRender = false;
             }
+
+            watchGameOver();
         }
 
         void render(Shader myShader) {
@@ -208,6 +210,20 @@ class Snake: public Entity {
             glUniformMatrix4fv(glGetUniformLocation(myShader.shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+
+        void watchGameOver() {
+            if(currentState == DEAD) {
+                resetState();
+            }
+        }
+
+        void resetState() {
+            model = glm::mat4(1.0f);
+            position = glm::vec3(0.0f, 0.0f, 0.0f);
+            currentState = UP;
+            speed = glm::vec3(0.0f, 0.0f, 0.0f);
+            tailList.clear();
         }
 
     private:
